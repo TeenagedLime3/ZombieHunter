@@ -1,6 +1,8 @@
 #define SDL_MAIN_HANDLED
 #include <iostream>
 #include <SDL.h>
+
+#include "Player.h"
 #define UPDATE_INTERVAL 0.1f
 
 
@@ -27,7 +29,10 @@ int main(){
     const int WINDOW_HEIGHT = dm.h/2;
 
     game.window = SDL_CreateWindow("Zombie Hunter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
+    game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    Player* player = new Player();
+
 
     SDL_Event event;
 
@@ -47,6 +52,9 @@ int main(){
             if(event.type == SDL_QUIT) {
                 running = false;
             }
+            if(event.type == SDL_KEYDOWN) {
+                player->handleInput(event.key.keysym.sym);
+            }
         }
 
         //update
@@ -54,11 +62,25 @@ int main(){
             accumulatedTime -= UPDATE_INTERVAL;
         }
 
+        int centerX = WINDOW_WIDTH/2;
+        int centerY = WINDOW_HEIGHT/2;
+
         //render
-        SDL_SetRenderDrawColor(game.renderer, 15, 236, 241, 255); //sets the colour
-        SDL_RenderClear(game.renderer); //sets the colour of the background to be the colour on the line above
+        //background
+        SDL_SetRenderDrawColor(game.renderer, 15, 236, 241, 255);
+        SDL_RenderClear(game.renderer);
+
+
+        //player
+        SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, 255);
+        SDL_Rect playerRender(centerX + player->getXCoordinate(), centerY - player->getYCoordinate(), 100, 200);
+        SDL_RenderFillRect(game.renderer, &playerRender);
+
+
+        //grass
+        SDL_SetRenderDrawColor(game.renderer, 96, 180 , 74, 255);
+        SDL_RenderFillRect(game.renderer, new SDL_Rect(0, WINDOW_HEIGHT, WINDOW_WIDTH, -100));
 
         SDL_RenderPresent(game.renderer); //updates the screen
-
     }
 }
