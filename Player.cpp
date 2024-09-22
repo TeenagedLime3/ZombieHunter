@@ -5,37 +5,37 @@
 #include "Player.h"
 #include <SDL.h>
 
-int Player::getXCoordinate() {
-    return position.x;
-}
-int Player::getYCoordinate() {
-    return position.y;
-}
-bool Player::isFacingRight() {
-    return facingRight;
-}
-
 void Player::handleInput(int key) {
     switch(key) {
         case SDLK_UP:
         case SDLK_w:
         case SDLK_SPACE:
-            position.y += 50;
+            boundingBox.y += 50;
             break;
         case SDLK_d:
         case SDLK_RIGHT:
             facingRight = true;
-            position.x += 50;
+            boundingBox.x += 50;
             break;
         case SDLK_a:
         case SDLK_LEFT:
             facingRight = false;
-            position.x -= 50;
+            boundingBox.x -= 50;
             break;
         case SDLK_s:
         case SDLK_DOWN:
             facingRight = false;
-            position.y -= 50;
+            boundingBox.y -= 50;
             break;
     }
+}
+
+void Player::update() {
+
+}
+
+void Player::render(SDL_Renderer* renderer, int originX, int originY) {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_Rect playerRender(originX + boundingBox.x, originY - boundingBox.y, boundingBox.width, boundingBox.height);
+    SDL_RenderFillRect(renderer, &playerRender);
 }

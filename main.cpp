@@ -5,7 +5,6 @@
 #include "Player.h"
 #define UPDATE_INTERVAL 0.1f
 
-
 typedef struct {
     SDL_Renderer *renderer;
     SDL_Window *window;
@@ -27,6 +26,9 @@ int main(){
 
     const int WINDOW_WIDTH = dm.w/2;
     const int WINDOW_HEIGHT = dm.h/2;
+
+    const int originX = WINDOW_WIDTH / 2;
+    const int originY = WINDOW_HEIGHT; //at the bottom so no /2
 
     game.window = SDL_CreateWindow("Zombie Hunter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -62,24 +64,17 @@ int main(){
             accumulatedTime -= UPDATE_INTERVAL;
         }
 
-        int centerX = WINDOW_WIDTH/2;
-        int centerY = WINDOW_HEIGHT/2;
-
         //render
         //background
         SDL_SetRenderDrawColor(game.renderer, 15, 236, 241, 255);
         SDL_RenderClear(game.renderer);
 
-
         //player
-        SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, 255);
-        SDL_Rect playerRender(centerX + player->getXCoordinate(), centerY - player->getYCoordinate(), 100, 200);
-        SDL_RenderFillRect(game.renderer, &playerRender);
-
+        player->render(game.renderer, originX, originY);
 
         //grass
         SDL_SetRenderDrawColor(game.renderer, 96, 180 , 74, 255);
-        SDL_RenderFillRect(game.renderer, new SDL_Rect(0, WINDOW_HEIGHT, WINDOW_WIDTH, -100));
+        SDL_RenderFillRect(game.renderer, new SDL_Rect(0, originY - 100, WINDOW_WIDTH, originY));
 
         SDL_RenderPresent(game.renderer); //updates the screen
     }
