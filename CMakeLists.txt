@@ -11,6 +11,8 @@ add_executable(Zombie_Hunter main.cpp
         Player.h
         Vector2i.h
         AABB.h
+        World.cpp
+        World.h
 )
 
 target_link_libraries(Zombie_Hunter "C:/Users/acsel/Documents/Programming/C++/Libs/SDL2-2.30.6/lib/x64/SDL2.lib") #sdl library

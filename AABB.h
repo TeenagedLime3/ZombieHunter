@@ -1,3 +1,6 @@
+#ifndef AABB_H
+#define AABB_H
+
 #include <iostream>
 
 //Axis Aligned Bounding Box
@@ -8,11 +11,11 @@ struct AABB {
     int height;
 
     bool intersects(const AABB& aabb) const { //saying the method is constant
-        if((aabb.x > x && aabb.x < x + width) && (aabb.y > y && aabb.y < y + height)) {
-            std::cout << "inside!" << std::endl;
-            return true;
-        }
-
-        return false;
+        return x < aabb.x + aabb.width &&
+            x + width > aabb.x &&
+            y < aabb.y + aabb.height &&
+            y + height > aabb.x;
     }
 };
+
+#endif
